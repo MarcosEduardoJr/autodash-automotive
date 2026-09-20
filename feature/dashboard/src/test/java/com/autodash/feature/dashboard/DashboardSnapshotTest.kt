@@ -49,4 +49,11 @@ class DashboardSnapshotTest {
             AutoDashTheme(Brands.Slate) { DashboardScreen(state) }
         }
     }
+
+    @Test
+    fun dashboard_light_theme() {
+        paparazzi.snapshot(name = "light_slate") {
+            AutoDashTheme(Brands.Slate, dark = false) { DashboardScreen(state) }
+        }
+    }
 }

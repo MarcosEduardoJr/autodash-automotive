@@ -1,0 +1,5 @@
+<resources>
+    <string name="climate">Climate</string>
+    <string name="driver">Driver</string>
+    <string name="passenger">Passenger</string>
+</resources>

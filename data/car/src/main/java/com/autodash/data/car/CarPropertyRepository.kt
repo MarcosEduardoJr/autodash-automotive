@@ -1,11 +1,14 @@
 package com.autodash.data.car
 
 import android.car.Car
+import android.car.VehicleAreaSeat
 import android.car.VehiclePropertyIds
 import android.car.hardware.CarPropertyValue
 import android.car.hardware.property.CarPropertyManager
+import com.autodash.core.model.Climate
 import com.autodash.core.model.Energy
 import com.autodash.core.model.Gear
+import com.autodash.core.model.Seat
 import com.autodash.core.model.VehicleSpeed
 import com.autodash.domain.CarRepository
 import kotlinx.coroutines.channels.awaitClose
@@ -96,4 +99,37 @@ class CarPropertyRepository(private val car: Car) : CarRepository {
         props.registerCallback(cb, VehiclePropertyIds.ENV_OUTSIDE_TEMPERATURE, CarPropertyManager.SENSOR_RATE_NORMAL)
         awaitClose { props.unregisterCallback(cb) }
     }.conflate()
+
+
+    // HVAC por ZONA: HVAC_TEMPERATURE_SET é uma propriedade por assento (area).
+    private fun seatArea(seat: Seat) =
+        if (seat == Seat.DRIVER) VehicleAreaSeat.SEAT_ROW_1_LEFT else VehicleAreaSeat.SEAT_ROW_1_RIGHT
+
+    override fun climate(): Flow<Climate> = callbackFlow {
+        var state = Climate()
+        val left = VehicleAreaSeat.SEAT_ROW_1_LEFT
+        val cb = object : CarPropertyManager.CarPropertyEventCallback {
+            override fun onChangeEvent(value: CarPropertyValue<*>) {
+                if (value.propertyId == VehiclePropertyIds.HVAC_TEMPERATURE_SET) {
+                    val t = value.value as Float
+                    state = if (value.areaId == left) state.copy(driverC = t) else state.copy(passengerC = t)
+                    trySend(state)
+                }
+            }
+            override fun onErrorEvent(propId: Int, areaId: Int) {}
+        }
+        props.registerCallback(cb, VehiclePropertyIds.HVAC_TEMPERATURE_SET, CarPropertyManager.SENSOR_RATE_ONCHANGE)
+        trySend(state) // valor inicial
+        awaitClose { props.unregisterCallback(cb) }
+    }.conflate()
+
+    override suspend fun setSeatTemp(seat: Seat, tempC: Float) {
+        // ESCRITA no veículo: exige CONTROL_CAR_CLIMATE (signature|privileged) — ver docs/04.
+        runCatching {
+            props.setProperty(
+                Float::class.java, VehiclePropertyIds.HVAC_TEMPERATURE_SET,
+                seatArea(seat), tempC.coerceIn(16f, 28f),
+            )
+        }
+    }
 }

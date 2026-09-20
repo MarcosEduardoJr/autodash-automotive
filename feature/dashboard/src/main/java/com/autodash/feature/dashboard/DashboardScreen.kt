@@ -1,5 +1,7 @@
 package com.autodash.feature.dashboard
 
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,7 +28,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.autodash.core.designsystem.ChakraPetch
-import com.autodash.core.designsystem.LocalBrandTokens
 import com.autodash.core.model.Energy
 import com.autodash.core.model.Gear
 import com.autodash.core.model.UnitSystem
@@ -64,8 +66,6 @@ fun DashboardScreen(state: DashboardUi = DashboardUi()) {
         BoxWithConstraints(Modifier.fillMaxSize().padding(horizontal = 28.dp, vertical = 22.dp)) {
             val wide = isWide(maxWidth.value.toInt(), maxHeight.value.toInt())
             Column(Modifier.fillMaxSize()) {
-                BrandHeader()
-                Spacer(Modifier.height(if (wide) 8.dp else 18.dp))
                 if (wide) {
                     Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(28.dp)) {
                         SpeedGauge(speedVal, speedMax, units.speedLabel, Modifier.weight(1.4f).fillMaxHeight())
@@ -102,40 +102,13 @@ fun DashboardScreen(state: DashboardUi = DashboardUi()) {
     }
 }
 
-@Composable
-private fun BrandHeader() {
-    val brand = LocalBrandTokens.current
-    val cs = MaterialTheme.colorScheme
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        Box(
-            Modifier.size(38.dp).clip(RoundedCornerShape(11.dp)).background(brandGradient(cs.primary)),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(brand.name.take(1), color = cs.onPrimary, fontFamily = ChakraPetch,
-                fontWeight = FontWeight.Bold, fontSize = 19.sp)
-        }
-        Spacer(Modifier.width(13.dp))
-        Column {
-            Text("AUTODASH", color = cs.onBackground, fontFamily = ChakraPetch,
-                fontWeight = FontWeight.Bold, letterSpacing = 4.sp, fontSize = 15.sp)
-            Text(brand.name, color = cs.onSurfaceVariant, fontFamily = ChakraPetch,
-                letterSpacing = 3.sp, fontSize = 10.sp)
-        }
-        Spacer(Modifier.weight(1f))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.size(8.dp).clip(RoundedCornerShape(4.dp)).background(cs.primary))
-            Spacer(Modifier.width(7.dp))
-            Text("LIVE", color = cs.primary, fontFamily = ChakraPetch,
-                fontWeight = FontWeight.SemiBold, letterSpacing = 3.sp, fontSize = 11.sp)
-        }
-    }
-}
 
 @Composable
 private fun SpeedGauge(value: Int, max: Int, unit: String, modifier: Modifier) {
     val cs = MaterialTheme.colorScheme
     val accent = cs.primary
     val track = cs.surfaceVariant
+    val shown by animateIntAsState(targetValue = value, animationSpec = tween(500), label = "speed")
     Box(modifier, contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
             val start = 135f
@@ -147,37 +120,44 @@ private fun SpeedGauge(value: Int, max: Int, unit: String, modifier: Modifier) {
             val cx = size.width / 2f
             val cy = size.height / 2f
             val r = d / 2f
-            // ticks
             for (i in 0..10) {
                 val a = Math.toRadians((start + sweep * i / 10f).toDouble())
                 val outer = r + stroke * 0.9f
                 val inner = r + stroke * (if (i % 5 == 0) 0.0f else 0.45f)
                 drawLine(
                     color = track,
-                    start = Offset(cx + (inner) * cos(a).toFloat(), cy + (inner) * sin(a).toFloat()),
-                    end = Offset(cx + (outer) * cos(a).toFloat(), cy + (outer) * sin(a).toFloat()),
+                    start = Offset(cx + inner * cos(a).toFloat(), cy + inner * sin(a).toFloat()),
+                    end = Offset(cx + outer * cos(a).toFloat(), cy + outer * sin(a).toFloat()),
                     strokeWidth = if (i % 5 == 0) 4f else 2f,
                 )
             }
-            // track arc
             drawArc(track, start, sweep, false, tl, arc, style = Stroke(stroke, cap = StrokeCap.Round))
-            // glow
-            val frac = (value.toFloat() / max).coerceIn(0f, 1f)
-            drawArc(accent.copy(alpha = 0.18f), start, sweep * frac, false, tl, arc,
+            val frac = (shown.toFloat() / max).coerceIn(0f, 1f)
+            drawArc(accent.copy(alpha = 0.16f), start, sweep * frac, false, tl, arc,
                 style = Stroke(stroke * 2.4f, cap = StrokeCap.Round))
-            // progress arc (gradient)
             drawArc(
                 brush = Brush.sweepGradient(
-                    0f to accent.copy(alpha = 0.55f), 0.5f to accent, 1f to accent,
+                    0f to accent.copy(alpha = 0.5f), 0.5f to accent, 1f to accent,
                     center = Offset(cx, cy),
                 ),
                 startAngle = start, sweepAngle = sweep * frac, useCenter = false,
                 topLeft = tl, size = arc, style = Stroke(stroke, cap = StrokeCap.Round),
             )
+            // NEEDLE + hub
+            val na = Math.toRadians((start + sweep * frac).toDouble())
+            val nlen = r - stroke * 0.4f
+            drawLine(
+                color = accent,
+                start = Offset(cx, cy),
+                end = Offset(cx + nlen * cos(na).toFloat(), cy + nlen * sin(na).toFloat()),
+                strokeWidth = stroke * 0.55f, cap = StrokeCap.Round,
+            )
+            drawCircle(cs.background, radius = stroke * 0.9f, center = Offset(cx, cy))
+            drawCircle(accent, radius = stroke * 0.5f, center = Offset(cx, cy))
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("$value", color = cs.onBackground, fontFamily = ChakraPetch,
-                fontWeight = FontWeight.Bold, fontSize = 108.sp)
+            Text("$shown", color = cs.onBackground, fontFamily = ChakraPetch,
+                fontWeight = FontWeight.Bold, fontSize = 104.sp)
             Text(unit, color = cs.onSurfaceVariant, fontFamily = ChakraPetch,
                 letterSpacing = 5.sp, fontSize = 20.sp)
         }
@@ -257,5 +237,3 @@ private fun StatCard(label: String, value: String, modifier: Modifier = Modifier
     }
 }
 
-private fun brandGradient(c: Color): Brush =
-    Brush.linearGradient(listOf(c, c.copy(alpha = 0.6f)))

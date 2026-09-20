@@ -1,21 +1,23 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.paparazzi)
 }
 android {
-    namespace = "com.autodash.feature.carapp"
+    namespace = "com.autodash.feature.climate"
     compileSdk = 34
     defaultConfig { minSdk = 29 }
+    buildFeatures { compose = true }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
     kotlinOptions { jvmTarget = "17" }
-    testOptions { unitTests { isIncludeAndroidResources = true } }
 }
 dependencies {
     implementation(project(":domain"))
     implementation(project(":core:model"))
-    implementation(libs.androidx.car.app)
+    implementation(project(":core:designsystem"))
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.lifecycle.viewmodel)
     testImplementation(libs.junit)
-    testImplementation(libs.androidx.car.app.testing)
-    testImplementation(libs.robolectric)
-    testImplementation(libs.androidx.test.core)
 }

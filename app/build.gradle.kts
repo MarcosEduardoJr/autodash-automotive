@@ -31,6 +31,7 @@ android {
 dependencies {
     implementation(project(":feature:dashboard"))
     implementation(project(":feature:carapp"))
+    implementation(project(":feature:climate"))
     implementation(project(":data:car"))
     implementation(project(":domain"))
     implementation(project(":core:model"))

@@ -1,9 +1,12 @@
 package com.autodash.data.car
 
+import com.autodash.core.model.Climate
 import com.autodash.core.model.Energy
 import com.autodash.core.model.Gear
 import com.autodash.core.model.VehicleSpeed
+import com.autodash.core.model.Seat
 import com.autodash.domain.CarRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -41,5 +44,15 @@ class FakeCarRepository : CarRepository {
     override fun outsideTempC(): Flow<Int> = flow {
         var t = 22; var up = true
         while (true) { emit(t); t += if (up) 1 else -1; if (t >= 26) up = false; if (t <= 18) up = true; delay(6000) }
+    }
+
+
+    private val _climate = MutableStateFlow(Climate())
+    override fun climate(): Flow<Climate> = _climate
+    override suspend fun setSeatTemp(seat: Seat, tempC: Float) {
+        val t = tempC.coerceIn(16f, 28f)
+        _climate.value =
+            if (seat == Seat.DRIVER) _climate.value.copy(driverC = t)
+            else _climate.value.copy(passengerC = t)
     }
 }
