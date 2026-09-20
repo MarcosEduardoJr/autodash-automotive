@@ -20,7 +20,7 @@ class DashboardSnapshotTest {
     @get:Rule
     val paparazzi = Paparazzi(deviceConfig = DeviceConfig.PIXEL_C) // tela larga
 
-    private val state = DashboardUi(VehicleSpeed(23f), Gear.DRIVE, Energy.Battery(74))
+    private val state = DashboardUi(VehicleSpeed(23f), Gear.DRIVE, Energy.Battery(74), rangeKm = 412, outsideTempC = 22)
 
     @Test
     fun dashboard_multiBrand_landscape() {

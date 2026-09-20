@@ -16,12 +16,11 @@ data class DashboardUi(
     val speed: VehicleSpeed = VehicleSpeed(0f),
     val gear: Gear = Gear.UNKNOWN,
     val energy: Energy = Energy.Unavailable,
+    val rangeKm: Int = 0,
+    val outsideTempC: Int = 0,
 )
 
-/**
- * MVVM: expõe um StateFlow imutável; a UI só lê. NÃO conhece CarPropertyManager —
- * fala com use cases/repo do domínio. Assim testa na JVM com um fake do CarRepository.
- */
+/** MVVM: StateFlow imutável; a UI só lê. Não conhece CarPropertyManager (fala com o domínio). */
 class DashboardViewModel(car: CarRepository) : ViewModel() {
 
     private val observeSpeed = ObserveVehicleSpeed(car)
@@ -29,8 +28,10 @@ class DashboardViewModel(car: CarRepository) : ViewModel() {
     val ui: StateFlow<DashboardUi> = _ui.asStateFlow()
 
     init {
-        viewModelScope.launch { observeSpeed().collect { s -> _ui.value = _ui.value.copy(speed = s) } }
-        viewModelScope.launch { car.gear().collect { g -> _ui.value = _ui.value.copy(gear = g) } }
-        viewModelScope.launch { car.energy().collect { e -> _ui.value = _ui.value.copy(energy = e) } }
+        viewModelScope.launch { observeSpeed().collect { _ui.value = _ui.value.copy(speed = it) } }
+        viewModelScope.launch { car.gear().collect { _ui.value = _ui.value.copy(gear = it) } }
+        viewModelScope.launch { car.energy().collect { _ui.value = _ui.value.copy(energy = it) } }
+        viewModelScope.launch { car.rangeKm().collect { _ui.value = _ui.value.copy(rangeKm = it) } }
+        viewModelScope.launch { car.outsideTempC().collect { _ui.value = _ui.value.copy(outsideTempC = it) } }
     }
 }

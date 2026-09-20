@@ -13,8 +13,7 @@ O app **não é** de nenhuma OEM. A identidade é um `BrandTokens` do
 [`core/designsystem`](../core/designsystem) (marcas neutras: Slate/Aurora/Ember/Nord).
 - **Padrão do build:** `BuildConfig.DEFAULT_BRAND` (aqui, `slate`). Em produção, cada OEM =
   um **flavor** que muda esse valor e fornece seus recursos/RRO — sem tocar nas telas.
-- **Dynamic theming:** o botão **"Trocar marca"** cicla as marcas em runtime; `AutoDashTheme`
-  re-tematiza tudo. Detalhe em [`docs/06`](../docs/06-multi-brand-rro.md).
+- **Uma marca por build** (white-label): sem seletor para o usuário. `AutoDashTheme` re-tematiza a partir do `BrandTokens` — o poder multi-brand é provado por snapshot (docs/06).
 
 ## Responsivo (portrait × landscape)
 `DashboardScreen` usa `BoxWithConstraints` + `isWide()` para adaptar: **landscape** = velocidade

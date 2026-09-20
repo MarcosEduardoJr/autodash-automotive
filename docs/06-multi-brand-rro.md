@@ -20,8 +20,8 @@ data class BrandTokens(val id: String, val name: String, val primary: Color, /* 
 // a tela lê o token, nunca o hex → RRO/tema conseguem sobrepor
 Text("...", color = MaterialTheme.colorScheme.primary)
 
-// dynamic theming: trocar o BrandTokens re-tematiza tudo em runtime
-AutoDashTheme(tokens = Brands.byId(brandId)) { DashboardScreen(state) }
+// o app entrega UMA marca por build (white-label). Sem seletor pro usuario:
+AutoDashTheme(tokens = Brands.byId(BuildConfig.DEFAULT_BRAND)) { DashboardScreen(state) }
 ```
 
 **Produção:** cada OEM = um **flavor** que define a marca padrão (`BuildConfig.DEFAULT_BRAND`)

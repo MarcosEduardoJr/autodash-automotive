@@ -20,6 +20,8 @@ class ObserveVehicleSpeedTest {
         override fun vehicleSpeed(): Flow<VehicleSpeed> = flowOf(*speeds.toTypedArray())
         override fun gear(): Flow<Gear> = flowOf(Gear.DRIVE)
         override fun energy(): Flow<Energy> = flowOf(Energy.Unavailable)
+        override fun rangeKm(): Flow<Int> = flowOf(400)
+        override fun outsideTempC(): Flow<Int> = flowOf(22)
     }
 
     @Test

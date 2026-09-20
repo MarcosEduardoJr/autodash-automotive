@@ -7,11 +7,12 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * CONTRATO com o veículo — o domínio depende DISTO, não do CarPropertyManager.
- * data/car implementa usando a Car API; testes usam um fake. É o coração da
- * inversão de dependência que mantém a regra testável na JVM.
+ * data/car implementa via Car API; testes usam um fake. Inversão de dependência.
  */
 interface CarRepository {
     fun vehicleSpeed(): Flow<VehicleSpeed>
     fun gear(): Flow<Gear>
     fun energy(): Flow<Energy>
+    fun rangeKm(): Flow<Int>        // autonomia restante (RANGE_REMAINING no VHAL)
+    fun outsideTempC(): Flow<Int>   // temperatura externa (ENV_OUTSIDE_TEMPERATURE)
 }

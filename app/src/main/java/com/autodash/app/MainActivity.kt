@@ -4,9 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -32,8 +29,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val repo: CarRepository = FakeCarRepository()
         setContent {
-            var brandId by rememberSaveable { mutableStateOf(BuildConfig.DEFAULT_BRAND) }
-            val brand = Brands.byId(brandId)
+            val brand = Brands.byId(BuildConfig.DEFAULT_BRAND)
             AutoDashTheme(brand) {
                 val vm: DashboardViewModel = viewModel(
                     factory = object : ViewModelProvider.Factory {
@@ -43,7 +39,7 @@ class MainActivity : ComponentActivity() {
                     },
                 )
                 val state by vm.ui.collectAsStateWithLifecycle()
-                DashboardScreen(state, onCycleBrand = { brandId = Brands.next(brand).id })
+                DashboardScreen(state)
             }
         }
     }

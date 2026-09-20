@@ -74,4 +74,26 @@ class CarPropertyRepository(private val car: Car) : CarRepository {
         )
         awaitClose { props.unregisterCallback(cb) }
     }
+
+
+    override fun rangeKm(): Flow<Int> = callbackFlow {
+        val cb = object : CarPropertyManager.CarPropertyEventCallback {
+            override fun onChangeEvent(value: CarPropertyValue<*>) {
+                // RANGE_REMAINING vem em METROS no VHAL -> km
+                trySend(((value.value as Float) / 1000f).toInt())
+            }
+            override fun onErrorEvent(propId: Int, areaId: Int) {}
+        }
+        props.registerCallback(cb, VehiclePropertyIds.RANGE_REMAINING, CarPropertyManager.SENSOR_RATE_NORMAL)
+        awaitClose { props.unregisterCallback(cb) }
+    }.conflate()
+
+    override fun outsideTempC(): Flow<Int> = callbackFlow {
+        val cb = object : CarPropertyManager.CarPropertyEventCallback {
+            override fun onChangeEvent(value: CarPropertyValue<*>) { trySend((value.value as Float).toInt()) }
+            override fun onErrorEvent(propId: Int, areaId: Int) {}
+        }
+        props.registerCallback(cb, VehiclePropertyIds.ENV_OUTSIDE_TEMPERATURE, CarPropertyManager.SENSOR_RATE_NORMAL)
+        awaitClose { props.unregisterCallback(cb) }
+    }.conflate()
 }

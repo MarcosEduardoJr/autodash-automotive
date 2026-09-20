@@ -8,8 +8,7 @@ superfície, nome, logo. **Nenhuma tela** conhece uma OEM — ela lê `MaterialT
 
 - **Padrão por build:** `BuildConfig.DEFAULT_BRAND`. Produção: 1 OEM = 1 flavor que define o
   valor e traz recursos/RRO. É o "multi-flavor/multi-brand build" da vaga — sem `if (marca)`.
-- **Dynamic theming:** trocar o `BrandTokens` re-tematiza tudo em runtime (`AutoDashTheme`).
-  O app tem um seletor ("Trocar marca") que demonstra isso ao vivo.
+- **Dynamic theming:** trocar o `BrandTokens` re-tematiza tudo (`AutoDashTheme`) — sem recompilar telas. Como o app é white-label, ele **entrega UMA marca por build** (`BuildConfig.DEFAULT_BRAND`); não há seletor de marca para o usuário final. O poder multi-brand é provado pelos **snapshots** das 4 marcas.
 - **RRO** da OEM (docs/06) sobrepõe por cima, também em runtime.
 
 ## Responsivo: portrait × landscape

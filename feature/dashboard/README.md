@@ -18,3 +18,12 @@ e expõe um `StateFlow` de estado; `DashboardScreen` renderiza velocímetro/marc
   `stringResource(...)`. Ver [`docs/09`](../../docs/09-whitelabel-responsive.md).
 - Provado em device (emulador en-US → 36 mph / English) e por snapshot Paparazzi
   (`english_imperial_slate`). `res/` não tem README (aapt exige só XML) — descrito aqui.
+
+## Redesign (cluster HUD)
+Tela reconstruída como um **cluster de instrumentos** (não um app genérico):
+- **Speedometer** e **anel de bateria** desenhados no `Canvas` (arco + ticks + glow) —
+  cara de engenharia, não de template.
+- **Seletor P-R-N-D**, cards de **autonomia/temperatura/modo**, header com marca + status LIVE.
+- Fonte **Chakra Petch** (HUD, SIL OFL) em `core/designsystem/res/font`.
+- **White-label de verdade:** a marca é fixa por build (não há botão "trocar marca"); cor e
+  tipografia vêm dos tokens. i18n mantém km/h×mph, km×mi, °C×°F por locale.
