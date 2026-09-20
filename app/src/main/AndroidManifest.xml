@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Marca este APK como automotivo. Sem isso, a Play não distribui no carro. -->
+    <uses-feature
+        android:name="android.hardware.type.automotive"
+        android:required="true" />
+
+    <!-- Leitura de velocidade: sensor básico. -->
+    <uses-permission android:name="android.car.permission.CAR_SPEED" />
+    <!-- Controlar clima exigiria signature|privileged + allowlist da OEM (ver docs/04):
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_CLIMATE" /> -->
+
+    <application
+        android:name=".AutoDashApplication"
+        android:label="AutoDash"
+        android:theme="@style/Theme.AutoDash">
+
+        <!-- Declara a categoria do app para o sistema automotivo. -->
+        <meta-data
+            android:name="com.android.automotive"
+            android:resource="@xml/automotive_app_desc" />
+
+        <!-- Superfície 1: dashboard rico, otimizado para carro PARADO. -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Superfície 2: POI dirigível via Car App Library (feature/carapp). -->
+        <service
+            android:name="com.autodash.feature.carapp.AutoDashCarAppService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="androidx.car.app.CarAppService" />
+                <category android:name="androidx.car.app.category.POI" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>

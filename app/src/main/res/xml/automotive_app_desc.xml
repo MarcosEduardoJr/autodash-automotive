@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Declara a(s) categoria(s) do app para o sistema automotivo.
+  "template"  → app da Car App Library (nav/POI/IoT).
+  "media"     → player que aparece no media center.
+  Sem este descriptor, o host não reconhece o tipo do app. Ver docs/08.
+-->
+<automotiveApp>
+    <uses name="template" />
+</automotiveApp>
