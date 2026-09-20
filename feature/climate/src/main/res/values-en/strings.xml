@@ -2,4 +2,6 @@
     <string name="climate">Climate</string>
     <string name="driver">Driver</string>
     <string name="passenger">Passenger</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
 </resources>

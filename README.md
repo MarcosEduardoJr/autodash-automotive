@@ -74,7 +74,7 @@ conhece Android nem o carro** → regra testável sem emulador.
 
 ## ▶️ Rodar
 ```bash
-./gradlew :app:installDebug     # instala no emulador (AVD com system image Automotive)
+./gradlew :app:installSlateDebug   # instala a marca "slate" (flavors: slate/aurora/ember/nord)
 ./gradlew test                  # unit + snapshot (Paparazzi) + template (Robolectric)
 ./gradlew :feature:dashboard:recordPaparazziDebug   # regenera os goldens
 ```

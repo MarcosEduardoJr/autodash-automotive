@@ -14,9 +14,16 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-        // Marca PADRÃO deste build. White-label: a identidade é config, não código.
-        // Em produção, cada OEM = um flavor que muda este valor + fornece recursos/RRO.
-        buildConfigField("String", "DEFAULT_BRAND", "\"slate\"")
+    }
+
+    // WHITE-LABEL: cada marca é um FLAVOR (aparece em Build Variants). Nomes NEUTROS,
+    // não OEMs reais. Trocar a identidade = trocar de flavor (sem tocar nas telas).
+    flavorDimensions += "brand"
+    productFlavors {
+        create("slate")  { dimension = "brand"; buildConfigField("String", "DEFAULT_BRAND", "\"slate\"") }
+        create("aurora") { dimension = "brand"; applicationIdSuffix = ".aurora"; buildConfigField("String", "DEFAULT_BRAND", "\"aurora\"") }
+        create("ember")  { dimension = "brand"; applicationIdSuffix = ".ember"; buildConfigField("String", "DEFAULT_BRAND", "\"ember\"") }
+        create("nord")   { dimension = "brand"; applicationIdSuffix = ".nord"; buildConfigField("String", "DEFAULT_BRAND", "\"nord\"") }
     }
 
     buildTypes { release { isMinifyEnabled = false } }
@@ -39,6 +46,7 @@ dependencies {
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)

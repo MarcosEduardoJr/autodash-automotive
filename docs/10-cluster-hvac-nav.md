@@ -22,3 +22,16 @@ Duas telas, dois ViewModels, um repositório. White-label: sem seletor de marca.
 - **Template POI (Robolectric + androidx.car.app:app-testing):** `PoiScreenTest` valida que
   `PoiScreen` devolve `ListTemplate` com N itens e o detalhe é `PaneTemplate` — testa a UI
   dirigível sem host de carro. 21 testes no total, verdes.
+
+## UX / usabilidade (padrões)
+- **Navegação:** `NavigationRail` (Material3) — padrão em head unit landscape: alvos grandes,
+  ícones + rótulo, foco/rotativo e TalkBack de graça. (Antes eram "pills" caseiras.)
+- **Controles:** `Switch` (POWER, A/C) com rótulo + status **On/Off** e ícone — feedback claro;
+  `FilledIconButton` (≥52–64dp) com `contentDescription` p/ +/- de temperatura e ventilação.
+- **Estado dependente:** desligar POWER **desabilita e apaga** zonas/A-C/FAN (nada de controle
+  "morto" clicável). i18n nos rótulos e no On/Off.
+
+## White-label nos Build Variants
+Cada marca é um **product flavor** (`slate`/`aurora`/`ember`/`nord`), então aparece em
+**Build Variants** no Android Studio (× debug/release). Selecionar o flavor = escolher a marca
+do binário. `BuildConfig.DEFAULT_BRAND` vem do flavor; a UI lê os tokens do design system.

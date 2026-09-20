@@ -4,10 +4,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AcUnit
+import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,7 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,9 +46,8 @@ import com.autodash.feature.dashboard.DashboardScreen
 import com.autodash.feature.dashboard.DashboardViewModel
 
 /**
- * Host. Chrome do app (marca + nav Cluster/Clima) + as telas (headerless).
- * WHITE-LABEL: marca fixa por build (BuildConfig.DEFAULT_BRAND). DEMO: FakeCarRepository.
- * Em AAOS real: CarPropertyRepository(android.car.Car.createCar(this)).
+ * Host. Navegação por **NavigationRail** (padrão automotivo em landscape: alvo grande,
+ * foco/rotativo, TalkBack). White-label: marca do FLAVOR (BuildConfig.DEFAULT_BRAND).
  */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,15 +59,16 @@ class MainActivity : ComponentActivity() {
                 val dashVm: DashboardViewModel = viewModel(factory = factory { DashboardViewModel(repo) })
                 val climVm: ClimateViewModel = viewModel(factory = factory { ClimateViewModel(repo) })
                 Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Column(Modifier.fillMaxSize()) {
-                        AppBar(tab, onTab = { tab = it })
+                    Row(Modifier.fillMaxSize()) {
+                        Rail(tab, onTab = { tab = it })
                         Box(Modifier.weight(1f)) {
                             if (tab == 0) {
                                 val s by dashVm.ui.collectAsStateWithLifecycle()
                                 DashboardScreen(s)
                             } else {
                                 val c by climVm.ui.collectAsStateWithLifecycle()
-                                ClimateScreen(c, onDelta = climVm::delta, onPower = climVm::togglePower, onAc = climVm::toggleAc, onFan = climVm::fan)
+                                ClimateScreen(c, onDelta = climVm::delta, onPower = climVm::togglePower,
+                                    onAc = climVm::toggleAc, onFan = climVm::fan)
                             }
                         }
                     }
@@ -71,53 +78,43 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-/** Barra do app: identidade da marca + navegação. Chrome fica no app, não nas telas. */
 @Composable
-private fun AppBar(tab: Int, onTab: (Int) -> Unit) {
+private fun Rail(tab: Int, onTab: (Int) -> Unit) {
     val cs = MaterialTheme.colorScheme
     val brand = LocalBrandTokens.current
-    Row(
-        Modifier.fillMaxWidth().padding(horizontal = 28.dp, vertical = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
+    NavigationRail(
+        header = {
+            Box(
+                Modifier.padding(top = 8.dp).size(44.dp).clip(RoundedCornerShape(13.dp))
+                    .background(Brush.linearGradient(listOf(cs.primary, cs.primary.copy(alpha = 0.6f))))
+                    .semantics { contentDescription = "AutoDash ${brand.name}" },
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(brand.name.take(1), color = cs.onPrimary, fontFamily = ChakraPetch,
+                    fontWeight = FontWeight.Bold, fontSize = 20.sp)
+            }
+        },
     ) {
-        Box(
-            Modifier.size(38.dp).clip(RoundedCornerShape(11.dp))
-                .background(Brush.linearGradient(listOf(cs.primary, cs.primary.copy(alpha = 0.6f)))),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(brand.name.take(1), color = cs.onPrimary, fontFamily = ChakraPetch,
-                fontWeight = FontWeight.Bold, fontSize = 19.sp)
-        }
-        Spacer(Modifier.width(13.dp))
-        Column {
-            Text("AUTODASH", color = cs.onBackground, fontFamily = ChakraPetch,
-                fontWeight = FontWeight.Bold, letterSpacing = 4.sp, fontSize = 15.sp)
-            Text(brand.name, color = cs.onSurfaceVariant, fontFamily = ChakraPetch,
-                letterSpacing = 3.sp, fontSize = 10.sp)
-        }
-        Spacer(Modifier.width(28.dp))
-        NavPill("CLUSTER", tab == 0) { onTab(0) }
-        Spacer(Modifier.width(8.dp))
-        NavPill("CLIMA", tab == 1) { onTab(1) }
+        Spacer(Modifier.height(12.dp))
+        val colors = NavigationRailItemDefaults.colors(
+            selectedIconColor = cs.onPrimary, indicatorColor = cs.primary,
+            unselectedIconColor = cs.onSurfaceVariant,
+            selectedTextColor = cs.primary, unselectedTextColor = cs.onSurfaceVariant,
+        )
+        NavigationRailItem(
+            selected = tab == 0, onClick = { onTab(0) }, colors = colors,
+            icon = { Icon(Icons.Filled.Speed, contentDescription = "Cluster") },
+            label = { Text("Cluster", fontFamily = ChakraPetch, fontSize = 11.sp) },
+        )
+        NavigationRailItem(
+            selected = tab == 1, onClick = { onTab(1) }, colors = colors,
+            icon = { Icon(Icons.Filled.AcUnit, contentDescription = "Clima") },
+            label = { Text("Clima", fontFamily = ChakraPetch, fontSize = 11.sp) },
+        )
         Spacer(Modifier.weight(1f))
-        Box(Modifier.size(8.dp).clip(RoundedCornerShape(4.dp)).background(cs.primary))
-        Spacer(Modifier.width(7.dp))
-        Text("LIVE", color = cs.primary, fontFamily = ChakraPetch,
-            fontWeight = FontWeight.SemiBold, letterSpacing = 3.sp, fontSize = 11.sp)
-    }
-}
-
-@Composable
-private fun NavPill(label: String, on: Boolean, onClick: () -> Unit) {
-    val cs = MaterialTheme.colorScheme
-    Box(
-        Modifier.clip(RoundedCornerShape(10.dp))
-            .background(if (on) cs.primary else cs.surface)
-            .clickable { onClick() }
-            .padding(horizontal = 18.dp, vertical = 9.dp),
-    ) {
-        Text(label, color = if (on) cs.onPrimary else cs.onSurfaceVariant,
-            fontFamily = ChakraPetch, fontWeight = FontWeight.SemiBold, letterSpacing = 2.sp, fontSize = 13.sp)
+        Box(Modifier.size(9.dp).clip(RoundedCornerShape(5.dp)).background(cs.primary))
+        Text("LIVE", color = cs.primary, fontFamily = ChakraPetch, fontSize = 9.sp,
+            letterSpacing = 2.sp, modifier = Modifier.padding(bottom = 12.dp, top = 4.dp))
     }
 }
 

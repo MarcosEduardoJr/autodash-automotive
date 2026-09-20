@@ -11,8 +11,9 @@ a **marca padrão** (via `BuildConfig.DEFAULT_BRAND`) e o *host* Activity do das
 ## White-label (design system multi-brand)
 O app **não é** de nenhuma OEM. A identidade é um `BrandTokens` do
 [`core/designsystem`](../core/designsystem) (marcas neutras: Slate/Aurora/Ember/Nord).
-- **Padrão do build:** `BuildConfig.DEFAULT_BRAND` (aqui, `slate`). Em produção, cada OEM =
-  um **flavor** que muda esse valor e fornece seus recursos/RRO — sem tocar nas telas.
+- **Um flavor por marca** (aparecem em **Build Variants**): `slate` / `aurora` / `ember` / `nord`
+  (× debug/release). Cada um seta `BuildConfig.DEFAULT_BRAND`. Nomes NEUTROS, não OEMs reais.
+  Trocar a identidade = trocar de flavor; produção adicionaria recursos/RRO por flavor.
 - **Uma marca por build** (white-label): sem seletor para o usuário. `AutoDashTheme` re-tematiza a partir do `BrandTokens` — o poder multi-brand é provado por snapshot (docs/06).
 
 ## Responsivo (portrait × landscape)

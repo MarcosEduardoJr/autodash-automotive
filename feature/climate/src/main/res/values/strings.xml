@@ -2,4 +2,6 @@
     <string name="climate">Clima</string>
     <string name="driver">Motorista</string>
     <string name="passenger">Passageiro</string>
+    <string name="on">Ligado</string>
+    <string name="off">Desligado</string>
 </resources>
