@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)   // Compose compiler (Kotlin 2.0)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -14,17 +14,13 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-    }
-
-    // Multi-brand: uma base, várias montadoras (ver docs/06).
-    flavorDimensions += "brand"
-    productFlavors {
-        create("volvo")  { dimension = "brand"; applicationIdSuffix = ".volvo" }
-        create("scania") { dimension = "brand"; applicationIdSuffix = ".scania" }
+        // Marca PADRÃO deste build. White-label: a identidade é config, não código.
+        // Em produção, cada OEM = um flavor que muda este valor + fornece recursos/RRO.
+        buildConfigField("String", "DEFAULT_BRAND", "\"slate\"")
     }
 
     buildTypes { release { isMinifyEnabled = false } }
-    buildFeatures { compose = true }
+    buildFeatures { compose = true; buildConfig = true }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17

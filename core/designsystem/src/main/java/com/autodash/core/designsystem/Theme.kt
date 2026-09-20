@@ -3,13 +3,30 @@ package com.autodash.core.designsystem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 
 /**
- * Tema base. RRO-FRIENDLY: as telas consomem MaterialTheme.colorScheme.* (tokens),
- * nunca cores fixas — assim o overlay da montadora consegue re-vestir o app (docs/06).
- * Head unit costuma operar em escuro; o esquema real vem do tema/flavor/RRO.
+ * Aplica os tokens da marca ao Material3 e publica LocalBrandTokens.
+ * DYNAMIC THEMING: mudar 'tokens' re-tematiza TUDO (as telas leem colorScheme + LocalBrandTokens),
+ * sem recompilar nem tocar nas telas. O RRO da OEM pode sobrepor por cima em runtime (docs/06).
  */
 @Composable
-fun AutoDashTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colorScheme = darkColorScheme(), content = content)
+fun AutoDashTheme(
+    tokens: BrandTokens = Brands.Slate,
+    content: @Composable () -> Unit,
+) {
+    val scheme = darkColorScheme(
+        primary = tokens.primary,
+        secondary = tokens.secondary,
+        background = tokens.background,
+        surface = tokens.surface,
+        surfaceVariant = tokens.surface,
+        onBackground = tokens.onBackground,
+        onSurface = tokens.onSurface,
+        onSurfaceVariant = tokens.onSurface,
+        onPrimary = tokens.background,
+    )
+    CompositionLocalProvider(LocalBrandTokens provides tokens) {
+        MaterialTheme(colorScheme = scheme, content = content)
+    }
 }
