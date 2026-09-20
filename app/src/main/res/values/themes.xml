@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Tema base do host Activity. Parent DeviceDefault.NoActionBar não exige AppCompat/Material
+  como dependência. RRO da OEM pode sobrepor cores em runtime (docs/06); o Compose usa o
+  colorScheme do AutoDashTheme (core/designsystem).
+-->
+<resources>
+    <style name="Theme.AutoDash" parent="@android:style/Theme.DeviceDefault.NoActionBar" />
+</resources>

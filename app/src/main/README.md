@@ -17,3 +17,13 @@ Declara a **categoria** do app. Usamos `template` (Car App Library). Poderia ser
 
 > **Pegadinha:** esquecer `uses-feature` **ou** o `automotive_app_desc` é o erro clássico —
 > o app "some" do carro sem erro óbvio. Ver [`docs/08`](../../docs/08-testing-and-distribution.md).
+
+---
+
+### Sobre `res/` (nós sem README próprio)
+O Android proíbe arquivos não-XML dentro de `res/` (o aapt falha). Por isso estes nós são
+explicados **aqui**, não com um README dentro deles:
+- **`res/`** — recursos do módulo. Ponto de entrada do multi-brand: flavors e **RRO** da OEM
+  sobrepõem recursos (`docs/06`).
+- **`res/values/`** — `themes.xml` (tema do host) + `strings.xml`. Nunca hardcode cor: use tema.
+- **`res/xml/`** — `automotive_app_desc.xml`, que declara a **categoria** do app automotivo (`docs/08`).

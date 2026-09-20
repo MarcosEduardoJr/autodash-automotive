@@ -8,13 +8,17 @@
 
     <!-- Leitura de velocidade: sensor básico. -->
     <uses-permission android:name="android.car.permission.CAR_SPEED" />
-    <!-- Controlar clima exigiria signature|privileged + allowlist da OEM (ver docs/04):
+    <!-- Controlar clima exigiria signature|privileged + allowlist da OEM (docs/04):
     <uses-permission android:name="android.car.permission.CONTROL_CAR_CLIMATE" /> -->
 
     <application
         android:name=".AutoDashApplication"
-        android:label="AutoDash"
+        android:label="@string/app_name"
+        android:icon="@android:drawable/ic_menu_compass"
         android:theme="@style/Theme.AutoDash">
+
+        <!-- android.car é lib da plataforma; usada por data/car (compileOnly/useLibrary). -->
+        <uses-library android:name="android.car" android:required="false" />
 
         <!-- Declara a categoria do app para o sistema automotivo. -->
         <meta-data
