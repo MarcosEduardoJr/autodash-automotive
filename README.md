@@ -45,7 +45,7 @@ O **domínio não conhece Android nem o carro**. Quem fala com `android.car.*` �
 `data/car`. Assim a regra de negócio roda em teste unitário puro, sem emulador automotivo.
 
 ## Como rodar (resumo)
-- Abra no Android Studio (Koala+). O app é **white-label**: a marca é um `BrandTokens` (design system), trocável em runtime (botão "Trocar marca") — nomes neutros, não OEMs reais.
+- Abra no Android Studio (Koala+). O app é **white-label**: a marca é um `BrandTokens` (design system), fixa por build (white-label real: sem seletor pro usuário) — marcas de exemplo neutras, não OEMs reais.
 - Rode numa **AVD com system image Automotive** (o emulador injeta velocidade/marcha).
 - Detalhes e distribuição: [`docs/08-testing-and-distribution.md`](docs/08-testing-and-distribution.md).
 
