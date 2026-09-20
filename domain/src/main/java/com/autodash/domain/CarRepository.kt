@@ -19,5 +19,8 @@ interface CarRepository {
     fun outsideTempC(): Flow<Int>   // temperatura externa (ENV_OUTSIDE_TEMPERATURE)
 
     fun climate(): Flow<Climate>                       // HVAC por zona (HVAC_TEMPERATURE_SET por area)
-    suspend fun setSeatTemp(seat: Seat, tempC: Float)  // escreve HVAC (exige CONTROL_CAR_CLIMATE, docs/04)
+    suspend fun setSeatTemp(seat: Seat, tempC: Float)  // HVAC_TEMPERATURE_SET por area
+    suspend fun setPower(on: Boolean)                  // HVAC_POWER_ON
+    suspend fun setAc(on: Boolean)                     // HVAC_AC_ON
+    suspend fun setFan(speed: Int)                     // HVAC_FAN_SPEED (0..6)
 }

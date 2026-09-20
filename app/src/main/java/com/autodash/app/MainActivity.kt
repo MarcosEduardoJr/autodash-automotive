@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
                                 DashboardScreen(s)
                             } else {
                                 val c by climVm.ui.collectAsStateWithLifecycle()
-                                ClimateScreen(c, onDelta = climVm::delta)
+                                ClimateScreen(c, onDelta = climVm::delta, onPower = climVm::togglePower, onAc = climVm::toggleAc, onFan = climVm::fan)
                             }
                         }
                     }

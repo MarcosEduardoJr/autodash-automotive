@@ -110,26 +110,40 @@ class CarPropertyRepository(private val car: Car) : CarRepository {
         val left = VehicleAreaSeat.SEAT_ROW_1_LEFT
         val cb = object : CarPropertyManager.CarPropertyEventCallback {
             override fun onChangeEvent(value: CarPropertyValue<*>) {
-                if (value.propertyId == VehiclePropertyIds.HVAC_TEMPERATURE_SET) {
-                    val t = value.value as Float
-                    state = if (value.areaId == left) state.copy(driverC = t) else state.copy(passengerC = t)
-                    trySend(state)
+                state = when (value.propertyId) {
+                    VehiclePropertyIds.HVAC_TEMPERATURE_SET -> {
+                        val t = value.value as Float
+                        if (value.areaId == left) state.copy(driverC = t) else state.copy(passengerC = t)
+                    }
+                    VehiclePropertyIds.HVAC_POWER_ON -> state.copy(powerOn = value.value as Boolean)
+                    VehiclePropertyIds.HVAC_AC_ON -> state.copy(acOn = value.value as Boolean)
+                    VehiclePropertyIds.HVAC_FAN_SPEED -> state.copy(fanSpeed = value.value as Int)
+                    else -> state
                 }
+                trySend(state)
             }
             override fun onErrorEvent(propId: Int, areaId: Int) {}
         }
-        props.registerCallback(cb, VehiclePropertyIds.HVAC_TEMPERATURE_SET, CarPropertyManager.SENSOR_RATE_ONCHANGE)
-        trySend(state) // valor inicial
+        val rate = CarPropertyManager.SENSOR_RATE_ONCHANGE
+        props.registerCallback(cb, VehiclePropertyIds.HVAC_TEMPERATURE_SET, rate)
+        props.registerCallback(cb, VehiclePropertyIds.HVAC_POWER_ON, rate)
+        props.registerCallback(cb, VehiclePropertyIds.HVAC_AC_ON, rate)
+        props.registerCallback(cb, VehiclePropertyIds.HVAC_FAN_SPEED, rate)
+        trySend(state)
         awaitClose { props.unregisterCallback(cb) }
     }.conflate()
 
+    // ESCRITA no veículo: exige CONTROL_CAR_CLIMATE (signature|privileged) — ver docs/04.
     override suspend fun setSeatTemp(seat: Seat, tempC: Float) {
-        // ESCRITA no veículo: exige CONTROL_CAR_CLIMATE (signature|privileged) — ver docs/04.
-        runCatching {
-            props.setProperty(
-                Float::class.java, VehiclePropertyIds.HVAC_TEMPERATURE_SET,
-                seatArea(seat), tempC.coerceIn(16f, 28f),
-            )
-        }
+        runCatching { props.setFloatProperty(VehiclePropertyIds.HVAC_TEMPERATURE_SET, seatArea(seat), tempC.coerceIn(16f, 28f)) }
+    }
+    override suspend fun setPower(on: Boolean) {
+        runCatching { props.setBooleanProperty(VehiclePropertyIds.HVAC_POWER_ON, 0, on) }
+    }
+    override suspend fun setAc(on: Boolean) {
+        runCatching { props.setBooleanProperty(VehiclePropertyIds.HVAC_AC_ON, 0, on) }
+    }
+    override suspend fun setFan(speed: Int) {
+        runCatching { props.setIntProperty(VehiclePropertyIds.HVAC_FAN_SPEED, 0, speed.coerceIn(0, 6)) }
     }
 }

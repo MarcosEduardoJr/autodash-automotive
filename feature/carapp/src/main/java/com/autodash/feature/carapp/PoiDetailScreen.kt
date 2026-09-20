@@ -1,7 +1,6 @@
 package com.autodash.feature.carapp
 
 import androidx.car.app.CarContext
-import androidx.car.app.CarToast
 import androidx.car.app.Screen
 import androidx.car.app.model.Action
 import androidx.car.app.model.Pane
@@ -23,9 +22,7 @@ class PoiDetailScreen(ctx: CarContext, private val poi: Poi) : Screen(ctx) {
             .addAction(
                 Action.Builder()
                     .setTitle("Navegar")
-                    .setOnClickListener {
-                        CarToast.makeText(carContext, "Iniciando navegação…", CarToast.LENGTH_SHORT).show()
-                    }
+                    .setOnClickListener { screenManager.push(NavScreen(carContext, poi)) }
                     .build()
             )
             .build()

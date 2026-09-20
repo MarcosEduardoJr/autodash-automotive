@@ -24,6 +24,9 @@ class ObserveVehicleSpeedTest {
         override fun outsideTempC(): Flow<Int> = flowOf(22)
         override fun climate(): Flow<com.autodash.core.model.Climate> = flowOf(com.autodash.core.model.Climate())
         override suspend fun setSeatTemp(seat: com.autodash.core.model.Seat, tempC: Float) {}
+        override suspend fun setPower(on: Boolean) {}
+        override suspend fun setAc(on: Boolean) {}
+        override suspend fun setFan(speed: Int) {}
     }
 
     @Test

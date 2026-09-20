@@ -55,4 +55,7 @@ class FakeCarRepository : CarRepository {
             if (seat == Seat.DRIVER) _climate.value.copy(driverC = t)
             else _climate.value.copy(passengerC = t)
     }
+    override suspend fun setPower(on: Boolean) { _climate.value = _climate.value.copy(powerOn = on) }
+    override suspend fun setAc(on: Boolean) { _climate.value = _climate.value.copy(acOn = on) }
+    override suspend fun setFan(speed: Int) { _climate.value = _climate.value.copy(fanSpeed = speed.coerceIn(0, 6)) }
 }

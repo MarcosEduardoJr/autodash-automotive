@@ -2,6 +2,7 @@ package com.autodash.feature.carapp
 
 import androidx.car.app.model.ListTemplate
 import androidx.car.app.model.PaneTemplate
+import androidx.car.app.navigation.model.NavigationTemplate
 import androidx.car.app.testing.TestCarContext
 import androidx.test.core.app.ApplicationProvider
 import org.junit.Assert.assertEquals
@@ -33,5 +34,11 @@ class PoiScreenTest {
     fun detalhe_ehPaneTemplate() {
         val template = PoiDetailScreen(carContext, demoPois.first()).onGetTemplate()
         assertTrue(template is PaneTemplate)
+    }
+
+    @Test
+    fun nav_ehNavigationTemplate() {
+        val template = NavScreen(carContext, demoPois.first()).onGetTemplate()
+        assertTrue(template is NavigationTemplate)
     }
 }
