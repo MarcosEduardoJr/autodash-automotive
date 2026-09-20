@@ -9,3 +9,7 @@
 .externalNativeBuild/
 .cxx/
 *.keystore
+
+# caches locais/IDE
+.kotlin/
+.idea/
