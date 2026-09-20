@@ -11,3 +11,10 @@
 
 > Contraste com o `dashboard`: aquele é Compose/Activity (parked); este é template
 > (drivable). Mesma app, duas superfícies.
+
+## Navegável (ListTemplate → PaneTemplate)
+- `PoiScreen` (ListTemplate): lista de POIs; clicar empilha o detalhe (`ScreenManager.push`).
+- `PoiDetailScreen` (PaneTemplate): endereço/distância + ação **"Navegar"** (em produção,
+  entregaria um `Trip` ao `NavigationManager`). BACK volta (`pop`).
+- `Poi.kt`: o dado (com teste `PoiTest`). Mostra dois templates + navegação entre telas —
+  fluxo raso e lista curta por distração (docs/03 + docs/05).

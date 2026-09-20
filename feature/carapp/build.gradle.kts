@@ -13,4 +13,5 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":core:model"))
     implementation(libs.androidx.car.app)
+    testImplementation(libs.junit)
 }

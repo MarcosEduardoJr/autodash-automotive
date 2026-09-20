@@ -1,0 +1,5 @@
+<resources>
+    <!-- Unidade por REGIÃO (i18n idiomático: config-driven, não if no código).
+         Métrico é o default (Brasil e maior parte do mundo). -->
+    <bool name="use_imperial">false</bool>
+</resources>

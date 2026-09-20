@@ -40,4 +40,13 @@ class DashboardSnapshotTest {
             AutoDashTheme(Brands.Slate) { DashboardScreen(state) }
         }
     }
+
+    @Test
+    fun dashboard_english_imperial() {
+        // i18n: locale en-US -> mph + strings em inglês (values-en). Ver docs/09.
+        paparazzi.unsafeUpdateConfig(DeviceConfig.PIXEL_C.copy(locale = "en-rUS"))
+        paparazzi.snapshot(name = "english_imperial_slate") {
+            AutoDashTheme(Brands.Slate) { DashboardScreen(state) }
+        }
+    }
 }

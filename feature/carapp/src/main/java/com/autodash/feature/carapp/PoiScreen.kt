@@ -9,36 +9,30 @@ import androidx.car.app.model.Row
 import androidx.car.app.model.Template
 
 /**
- * Uma Screen devolve um Template; o HOST desenha. Nada de View/Compose aqui.
- * ListTemplate = lista dirigível. Mantemos CURTA: o host limita itens em movimento
- * (ConstraintManager) por distração (docs/03 + docs/05). invalidate() pediria refresh.
+ * Tela de POI (ListTemplate). O HOST desenha; nada de View/Compose.
+ * NAVEGÁVEL: clicar num item empilha a tela de detalhe (ScreenManager.push) —
+ * fluxo raso, itens limitados pelo host em movimento (distração, docs/03 + docs/05).
  */
 class PoiScreen(ctx: CarContext) : Screen(ctx) {
 
     override fun onGetTemplate(): Template {
-        val list = ItemList.Builder().apply {
-            postosProximos().forEach { poi ->
+        val items = ItemList.Builder().apply {
+            demoPois.forEach { poi ->
                 addItem(
                     Row.Builder()
                         .setTitle(poi.name)
                         .addText(poi.distance)
-                        .setOnClickListener { /* navegar/ver detalhe */ }
+                        .setOnClickListener { screenManager.push(PoiDetailScreen(carContext, poi)) }
+                        .setBrowsable(true)
                         .build()
                 )
             }
         }.build()
 
         return ListTemplate.Builder()
-            .setSingleList(list)
+            .setSingleList(items)
             .setTitle("Postos próximos")
-            .setHeaderAction(Action.BACK)
+            .setHeaderAction(Action.APP_ICON)
             .build()
     }
-
-    private data class Poi(val name: String, val distance: String)
-    private fun postosProximos() = listOf(
-        Poi("Posto Ipiranga", "1,2 km"),
-        Poi("Shell Select", "2,8 km"),
-        Poi("Eletroposto EDP", "3,5 km"),
-    )
 }
