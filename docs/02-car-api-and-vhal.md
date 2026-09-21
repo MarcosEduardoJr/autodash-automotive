@@ -5,6 +5,12 @@ Imagine que o carro é um prédio enorme cheio de sensores e botões, e você **
 
 > 📖 Toda sigla deste capítulo está explicada no [glossário](00-glossario.md).
 
+```mermaid
+flowchart TD
+  App["Seu app"] -->|"Car.createCar()"| Car["Car"] --> CS["CarService"] --> CPM["CarPropertyManager"] -->|"propriedades"| VHAL["VHAL"] --> HW["Hardware"]
+```
+
+
 ## A porta para os dados do veículo
 Antes de pedir qualquer coisa, seu app precisa "discar" para o balcão. Esse balcão é a **Car API** (API quer dizer *Application Programming Interface* — o conjunto de comandos que o Android dá pro seu app falar com o carro; você faz pedidos por ele em vez de mexer no hardware direto). Ela só existe no **AAOS** (*Android Automotive OS* — o Android que roda **dentro** do carro).
 

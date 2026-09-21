@@ -8,6 +8,13 @@ A segunda ideia do capítulo é parecida com redimensionar uma janela no computa
 
 > 📖 Toda sigla deste capítulo está explicada no [glossário](00-glossario.md).
 
+```mermaid
+flowchart LR
+  Base["1 código-base (lê tokens)"] --> T1["tokens: Slate"] --> B1["app azul"]
+  Base --> T2["tokens: Aurora"] --> B2["app verde"]
+```
+
+
 ## White-label: a marca é DADO, não código
 
 **White-label** ("marca branca" — um app que vira várias marcas só trocando cor/logo, como a mesma camiseta lisa que ganha a estampa de cada time) significa que **o mesmo binário** (o mesmo app já compilado) **vira qualquer marca**. A identidade — o "rosto" da montadora — não está espalhada pelo código; ela mora num único lugar, o `BrandTokens`

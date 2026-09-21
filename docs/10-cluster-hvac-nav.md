@@ -8,6 +8,13 @@ Tem um detalhe importante de bom senso: no ar-condicionado de casa, o **motorist
 
 > 📖 Toda sigla deste capítulo está explicada no [glossário](00-glossario.md).
 
+```mermaid
+flowchart LR
+  UI["ClimateScreen (View)"] -->|"toque +/-"| VM["ViewModel"] -->|"setSeatTemp()"| Repo["CarRepository"] --> Car["Carro / Fake"]
+  Car -->|"StateFlow"| VM --> UI
+```
+
+
 ## Cluster (feature/dashboard)
 
 Primeiro, uma palavra nova: **cluster** (o *painel de instrumentos* — aquele conjunto de mostradores bem na frente do motorista: velocímetro, marcha, bateria). No nosso app, quem faz esse papel é a tela `dashboard` (ver [`feature/dashboard`](../feature/dashboard)).

@@ -6,6 +6,13 @@ Imagine que você está no banco do carona conversando com quem dirige. Com o ca
 
 > 📖 Toda sigla deste capítulo está explicada no [glossário](00-glossario.md).
 
+```mermaid
+flowchart LR
+  Parked["PARKED (parado)"] -->|"libera tudo"| Rich["tela rica"]
+  Moving["MOVING (andando)"] -->|"restringe"| Simple["tela simples: texto curto, sem teclado/vídeo"]
+```
+
+
 ## Segurança não é um detalhe — é um requisito
 
 Segurança é **requisito**, não detalhe. No celular, ninguém está dirigindo enquanto usa seu app; no carro, pode estar. Por isso o sistema **limita sua UI** (a interface, ou seja, a tela do seu app) enquanto o carro anda. Você não escolhe se quer obedecer: o carro impõe. Essas regras têm um nome — **CarUxRestrictions** (Car UX Restrictions — as regras de segurança que o carro impõe à sua tela *enquanto anda*: menos texto, sem teclado, sem vídeo; "UX" é *User Experience*, a experiência do usuário). A analogia boa é um **"modo dirigindo"** que simplifica tudo automaticamente.

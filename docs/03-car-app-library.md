@@ -6,6 +6,13 @@ Imagine que, em vez de pintar a tela você mesmo, você preenche um **formulári
 
 > 📖 Toda sigla deste capítulo está explicada no [glossário](00-glossario.md).
 
+```mermaid
+flowchart LR
+  Screen["Screen (seu código)"] -->|"onGetTemplate()"| Template["Template (molde)"] --> Host["host do carro"] --> Tela["Tela no painel"]
+  Host -. "impõe regras de distração" .-> Template
+```
+
+
 ## A ideia central: você descreve, o carro desenha
 
 Num app de **celular** comum, você desenha cada tela na mão: decide onde fica o botão, a cor, o tamanho da fonte. Aqui é o contrário. Com a **Car App Library** (a biblioteca do Android pra fazer apps de carro **sem desenhar pixel** — você descreve *o quê* mostrar e o carro desenha), você monta a tela escolhendo **templates**.

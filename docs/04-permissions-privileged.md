@@ -6,6 +6,15 @@ Imagine um prédio com portaria. Escrever no formulário "eu quero entrar na sal
 
 > 📖 Toda sigla deste capítulo está explicada no [glossário](00-glossario.md).
 
+```mermaid
+flowchart TD
+  P["Ler/controlar algo do carro"] --> Q{"É sensível?"}
+  Q -->|"não (ex.: velocidade)"| N["normal — app comum"]
+  Q -->|"sim (ex.: ar, portas)"| S["signature | privileged"]
+  S -. "sem chave/allowlist" .-> E["SecurityException 💥"]
+```
+
+
 Permissões (autorização pra o app fazer algo sensível — ler a velocidade, mexer no ar) do carro vivem num espaço de nomes próprio, `android.car.permission.*`. Você pede cada uma no **manifest** (o `AndroidManifest.xml`, o "documento de identidade" do app, onde ele declara nome, telas e tudo o que pede). Mas atenção: **declarar no manifest não basta.** No celular, pedir já é metade do caminho. No carro, pra coisas sérias, pedir é só o começo — falta o carro **reconhecer** que você tem direito.
 
 O Android classifica cada permissão por um **nível de proteção**, que decide **quem** consegue obtê-la. Dois deles já vêm do mundo do celular: **normal** (o sistema concede sozinho, sem perguntar) e **dangerous** (pede confirmação em *runtime* — aquele diálogo "permitir acesso?" que aparece com o app rodando). No carro entram mais **dois níveis**, bem mais fechados — **signature** e **privileged**. Os quatro pontos abaixo explicam esses dois níveis novos e as duas peças que aparecem junto com eles (a chave da fábrica e quem manda na lista):

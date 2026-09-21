@@ -6,6 +6,12 @@ Você fez um app que roda dentro de um carro — mas não tem um carro em cima d
 
 > 📖 Toda sigla deste capítulo está explicada no [glossário](00-glossario.md).
 
+```mermaid
+flowchart TD
+  U["Unit JVM + Fake (muitos, rápidos, baratos)"] --> R["Robolectric (Android de brinquedo)"] --> E["Emulador / AVD"] --> H["Carro real (raro)"]
+```
+
+
 ## Testar sem (e com) o veículo
 
 Testar app de carro parece assustador porque o carro é caro e difícil de conseguir. O truque é pensar nos testes como uma **pirâmide**: embaixo, muitos testes **rápidos e baratos** que rodam na sua própria máquina; no topo, poucos testes **lentos e caros** que precisam de hardware. Você passa quase todo o tempo na base e raramente precisa do carro real.

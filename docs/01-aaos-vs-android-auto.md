@@ -8,6 +8,18 @@ No carro é igualzinho. Ou o **sistema do carro é o próprio Android** (a tela 
 
 > 📖 Toda sigla deste capítulo está explicada no [glossário](00-glossario.md). Não precisa decorar nada: quando bater uma dúvida numa sigla, é só voltar lá.
 
+```mermaid
+flowchart LR
+  subgraph AAOS["AAOS — app roda no carro"]
+    A1["App"] --> A2["Car API / VHAL"] --> A3["Hardware do carro"]
+  end
+  subgraph AA["Android Auto — app roda no celular"]
+    B1["App (no celular)"] -->|"projeta a imagem"| B2["Tela do painel"]
+    B1 -. "NÃO enxerga" .-> B3["Dados do carro"]
+  end
+```
+
+
 ## A distinção fundamental
 
 Antes de qualquer sigla, guarde uma imagem: a tela grande do painel (onde ficam rádio, mapa e ar-condicionado) é um **computador rodando um sistema**. Esse conjunto tela+computador tem um nome — **head unit** (o "celular embutido no carro"; sempre que ler "roda no head unit", pense "roda nesse computador do painel"). A pergunta do capítulo é: *quem manda nesse computador?*

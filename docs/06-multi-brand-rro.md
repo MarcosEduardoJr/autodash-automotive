@@ -6,6 +6,12 @@ Imagine uma fábrica que faz **uma única camiseta lisa** e, no fim da linha, ca
 
 > 📖 Toda sigla deste capítulo está explicada no [glossário](00-glossario.md). Não precisa decorar — volte lá quando aparecer uma sigla nova.
 
+```mermaid
+flowchart LR
+  Base["mesmo app-base"] -->|"RRO / tokens (runtime)"| Skin["capa por cima"] --> Marca["cara de cada marca"]
+```
+
+
 ## Um app, várias montadoras
 
 Como o mesmo código veste a marca de cada montadora? A cola é esta:

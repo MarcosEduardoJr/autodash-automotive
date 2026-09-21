@@ -6,6 +6,13 @@ O computador do painel do carro não é um celular. Um celular você desliga e e
 
 > 📖 Toda sigla deste capítulo está explicada no [glossário](00-glossario.md).
 
+```mermaid
+flowchart LR
+  ON["ON (ligado)"] --> SP["SHUTDOWN_PREPARE (salve o estado!)"] --> SUS["SUSPEND (dorme)"]
+  Garage["Garage mode"] -. "acorda p/ manutenção" .-> SUS
+```
+
+
 ## Head unit não é celular
 
 O **head unit** (a tela + computador do painel do carro — pense nele como "o celular embutido no carro") tem um ciclo de vida bem diferente do telefone que você já conhece. No celular, o usuário liga e desliga a tela o dia inteiro e o sistema pode matar o seu app quando quiser. No carro, quem manda no liga/desliga é a **ignição** (girar a chave ou apertar o botão de partida): quando o motorista desliga o carro, o head unit **não apaga na hora** — ele **suspende** (entra num sono leve, pra voltar rápido depois) e pode até **acordar sozinho** mais tarde, com o carro parado, só pra fazer tarefas de manutenção.
