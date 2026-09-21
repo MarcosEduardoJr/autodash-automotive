@@ -12,5 +12,12 @@ mostra duas zonas (motorista/passageiro) com +/- de temperatura.
 - Fluxo completo: botão → `ViewModel.delta` → `CarRepository.setSeatTemp(seat, temp)` →
   `climate()` reemite → UI. A UI **não** conhece `CarPropertyManager` (Clean Arch).
 
-Responsivo (BoxWithConstraints) e white-label (cor/tipografia dos tokens). Snapshot em
-`ClimateSnapshotTest`.
+Responsivo (BoxWithConstraints) e white-label (cor/tipografia dos tokens).
+
+**UX (padrões automotivos):** POWER/A-C são `Switch` Material3 com **status On/Off** + ícone
+(feedback claro do estado); +/− de temperatura e FAN usam `FilledIconButton` (alvo ≥64dp, ripple,
+`contentDescription` p/ TalkBack); **POWER off desabilita e apaga** zonas/A-C/FAN (gating).
+
+**Testes:** `ClimateViewModelTest` (unit, coroutines-test) cobre `togglePower/toggleAc/fan/delta`,
+os clamps (fan 0..6, temp 16..28) e a independência por zona; `ClimateSnapshotTest` (Paparazzi)
+tem clima por marca + `climate_power_off`/`climate_ac_off` (prova visual do gating).

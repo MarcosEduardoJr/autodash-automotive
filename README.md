@@ -7,6 +7,21 @@ App **Android Automotive** real, multi-módulo em **Clean Architecture**, **whit
 > **AAOS ≠ Android Auto.** Este app roda **no head unit do carro** (Car API/VHAL), não é o
 > celular projetando a tela. Detalhe em [`docs/01`](docs/01-aaos-vs-android-auto.md).
 
+## 🎬 Demo (emulador AAOS)
+
+![Demo AutoDash](docs/autodash-demo.gif)
+
+*Cluster com velocímetro animado (needle) → aba **Clima** (`NavigationRail`) → **POWER off**: as
+zonas, o A/C e o FAN **apagam e desabilitam** — feedback claro do estado na tela.*
+
+**Como foi feito (resumo):** multi-módulo **Clean Architecture** (`feature → domain ← data`, tudo
+sobre `core`); o **domínio é puro** (sem `android.car`) e fala com o veículo por um `CarRepository`
+— na demo um `FakeCarRepository` (roda em qualquer emulador, sem permissão de carro); em produção,
+o `CarPropertyRepository` (`CarPropertyManager` + `VehiclePropertyIds`) sem tocar a UI. **UI**
+Jetpack Compose (Canvas p/ o velocímetro, Material3, `NavigationRail`, `Switch`, `FilledIconButton`),
+**white-label** por *design tokens* + **flavors** de marca, **i18n** (km/h×mph por região) e
+**testes** unit + snapshot + template. Cada pasta tem um `README.md` explicando o *micro* e o *macro*.
+
 ## 📸 Como está
 
 **Cluster** — velocímetro (Canvas: arco + ticks + needle + animação), anel de bateria,
@@ -83,9 +98,16 @@ sem carro/permissão); para dados reais, troque por `CarPropertyRepository(Car.c
 — a UI não muda (Clean Architecture).
 
 ## ✅ Testes
-Unit (JVM), **snapshot multi-brand** (Paparazzi: 4 marcas + portrait + inglês/imperial + tema
-claro + clima) e **template dirigível** (Robolectric + `androidx.car.app:app-testing`:
-`ListTemplate` / `PaneTemplate` / `NavigationTemplate`). Sem CI/CD, por escolha.
+Três níveis (mapa completo em [`docs/08`](docs/08-testing-and-distribution.md)):
+- **Unit (JVM)** — modelo/i18n (`ClimateTest`, `UnitsTest`), use case (`ObserveVehicleSpeedTest`) e
+  **ViewModels** (`DashboardViewModelTest`, `ClimateViewModelTest`) com `kotlinx-coroutines-test`
+  (troca `Dispatchers.Main`; `runCurrent` vs `advanceUntilIdle` p/ fluxos infinitos; clamps e zona).
+- **Snapshot** (Paparazzi) — 4 marcas + portrait + inglês/imperial + tema claro; clima por marca +
+  **`climate_power_off`/`climate_ac_off`** (prova visual do gating).
+- **Template dirigível** (Robolectric + `androidx.car.app:app-testing`) — `ListTemplate` /
+  `PaneTemplate` / `NavigationTemplate`.
+
+`./gradlew test` roda tudo. Sem CI/CD, por escolha.
 
 ## 📚 O curso
 Comece por [`docs/README.md`](docs/README.md) e desça a árvore módulo a módulo — cada

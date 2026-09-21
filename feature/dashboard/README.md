@@ -27,3 +27,8 @@ Tela reconstruída como um **cluster de instrumentos** (não um app genérico):
 - Fonte **Chakra Petch** (HUD, SIL OFL) em `core/designsystem/res/font`.
 - **White-label de verdade:** a marca é fixa por build (não há botão "trocar marca"); cor e
   tipografia vêm dos tokens. i18n mantém km/h×mph, km×mi, °C×°F por locale.
+
+**Testes:** `DashboardViewModelTest` (unit, coroutines-test) prova o MVVM — o VM mapeia os sinais
+do repo para o `StateFlow` de UI; usa `runCurrent()` (não `advanceUntilIdle()`) porque os fluxos do
+fake são infinitos (`while(true){emit;delay}`). `DashboardSnapshotTest` (Paparazzi) trava o visual
+por marca + portrait + inglês/imperial + tema claro.
