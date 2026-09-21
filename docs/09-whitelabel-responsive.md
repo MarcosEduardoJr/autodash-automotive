@@ -7,7 +7,7 @@ superfície, nome, logo. **Nenhuma tela** conhece uma OEM — ela lê `MaterialT
 + `LocalBrandTokens`. Marcas de exemplo têm nomes **neutros** de propósito (Slate/Aurora/Ember/Nord).
 
 - **Padrão por build:** `BuildConfig.DEFAULT_BRAND`. Produção: 1 OEM = 1 flavor que define o
-  valor e traz recursos/RRO. É o "multi-flavor/multi-brand build" da vaga — sem `if (marca)`.
+  valor e traz recursos/RRO. É o "multi-flavor/multi-brand build" — sem `if (marca)`.
 - **Dynamic theming:** trocar o `BrandTokens` re-tematiza tudo (`AutoDashTheme`) — sem recompilar telas. Como o app é white-label, ele **entrega UMA marca por build** (`BuildConfig.DEFAULT_BRAND`); não há seletor de marca para o usuário final. O poder multi-brand é provado pelos **snapshots** das 4 marcas.
 - **RRO** da OEM (docs/06) sobrepõe por cima, também em runtime.
 
@@ -24,4 +24,4 @@ Head units são heterogêneos (cluster largo, telas centrais em retrato) — res
   **cada marca** (landscape) + **portrait**, na JVM, sem device. Goldens em
   `feature/dashboard/src/test/snapshots/`. `./gradlew :feature:dashboard:verifyPaparazziDebug`
   barra regressão visual entre marcas — exatamente o "snapshot testing for multi-brand UI
-  consistency" da vaga. Regenerar: `recordPaparazziDebug`.
+  consistency". Regenerar: `recordPaparazziDebug`.

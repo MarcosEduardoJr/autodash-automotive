@@ -1,12 +1,12 @@
 # 08 · Testar AAOS & distribuir
 
-## Testar sem (e com) o caminhão
+## Testar sem (e com) o veículo
 | Nível | Como |
 |---|---|
 | Unit (JVM) | **Fake** do `CarRepository` — rápido, sem device. Ver `domain/` |
 | Integração | Robolectric / test doubles da car-lib |
 | Sistema | **Emulador automotivo** (system image Automotive) injeta velocidade/marcha |
-| Hardware | O caminhão: validação final |
+| Hardware | O veículo real: validação final |
 
 No emulador, injete **velocidade > 0** pelos *extended controls* para exercitar
 `CarUxRestrictions`. Para lógica pura, esconda a Car API atrás de `CarRepository` e use fake.

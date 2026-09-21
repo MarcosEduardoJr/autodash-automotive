@@ -3,7 +3,7 @@
 **Micro:** `ClimateViewModel` lê `car.climate()` (StateFlow) e manda deltas; `ClimateScreen`
 mostra duas zonas (motorista/passageiro) com +/- de temperatura.
 
-**Macro — é a Car API "por zona" que a vaga valoriza (ver [`docs/02`](../../docs/02-car-api-and-vhal.md)):**
+**Macro — a Car API "por zona" (ver [`docs/02`](../../docs/02-car-api-and-vhal.md)):**
 - `HVAC_TEMPERATURE_SET` é uma propriedade **por assento** (`area`). Cada zona usa um
   `VehicleAreaSeat` (SEAT_ROW_1_LEFT/RIGHT) — mudar o motorista não mexe no passageiro.
 - **Escrever** (o +/-) chama `setProperty`, que exige a permissão **`CONTROL_CAR_CLIMATE`**

@@ -47,7 +47,7 @@ hardcoded; a marca é fixa **por build**:
 - **POI + Navegação (dirigível):** lista de POIs (`ListTemplate`) → detalhe (`PaneTemplate`) →
   **navegação** (`NavigationTemplate` + `NavigationManager` + `Trip`) pela **Car App Library**.
 
-## Skills da vaga cobertas
+## O que o projeto cobre
 | Área | Onde |
 |---|---|
 | Kotlin + Jetpack Compose | todo o app |
@@ -114,5 +114,5 @@ Comece por [`docs/README.md`](docs/README.md) e desça a árvore módulo a módu
 `README.md` amarra o código ao conceito de Android Automotive.
 
 ---
-*Estudo pessoal para a vaga de Sr Android Automotive Developer. Marcas de exemplo (Slate/
+*Projeto de estudo de Android Automotive (AAOS) — app + curso. Marcas de exemplo (Slate/
 Aurora/Ember/Nord) são fictícias — white-label, sem OEMs reais.*

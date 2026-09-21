@@ -28,7 +28,7 @@ AutoDashTheme(tokens = Brands.byId(BuildConfig.DEFAULT_BRAND)) { DashboardScreen
 e traz recursos/RRO — o mecanismo "multi-flavor/multi-brand build", sem `if (marca)` nas telas.
 
 ## Snapshot testing
-A vaga pede **snapshot testing** p/ consistência multi-marca. **Paparazzi** renderiza a tela
+**Snapshot testing** garante consistência multi-marca. **Paparazzi** renderiza a tela
 por marca/tema (na JVM) e o CI falha se um pixel muda sem querer — pega regressão visual sem
 abrir cada carro. Cubra RTL e fontes ampliadas também.
 

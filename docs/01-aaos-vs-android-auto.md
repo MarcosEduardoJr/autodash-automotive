@@ -1,6 +1,6 @@
 # 01 · AAOS × Android Auto (e o que é AAOS por dentro)
 
-## A distinção que cai em toda entrevista
+## A distinção fundamental
 - **Android Automotive OS (AAOS):** um Android que **É o carro** — roda no *head unit*.
   O app é instalado no veículo e tem acesso à **Car API / VHAL**.
 - **Android Auto:** o **celular projetando** a tela no painel. O app roda no telefone e
